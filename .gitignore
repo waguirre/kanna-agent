@@ -1,5 +1,5 @@
 node_modules/
 .DS_Store
 *.log
-# data runtime tidak pernah ada di repo (disimpan di ~/.cache/kantor-agent/)
+# data runtime tidak pernah ada di repo (disimpan di ~/.cache/kanna-agent/)
 .cache/

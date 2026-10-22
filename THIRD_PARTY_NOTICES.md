@@ -1,7 +1,7 @@
 # Third-party notices
 
-Kantor Agent bundles (vendors) a copy of the following third-party software under
-`skills/kantor-agent/runtime/public/assets/vendor/three/`. It remains under its own license, reproduced in full below
+Kanna Agent bundles (vendors) a copy of the following third-party software under
+`skills/kanna-agent/runtime/public/assets/vendor/three/`. It remains under its own license, reproduced in full below
 and alongside the files (`vendor/three/LICENSE`). The rest of this project is licensed under the MIT License
 (see `LICENSE`).
 

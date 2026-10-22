@@ -52,7 +52,7 @@ export function summarizeAgy(text) {
 }
 
 export function scanAgy(nowSec, cfg) {
-  const file = path.join(process.env.KANTOR_PROVIDERS_DIR || path.join(os.homedir(), '.cache', 'kantor-agent', 'providers', 'agy'), 'events.jsonl');
+  const file = path.join(process.env.KANNA_PROVIDERS_DIR || path.join(os.homedir(), '.cache', 'kanna-agent', 'providers', 'agy'), 'events.jsonl');
   if (!isFile(file) || mtimeSec(file) < nowSec - cfg.window_days * 86400) return [];
   const size = fs.statSync(file).size;
   const fd = fs.openSync(file, 'r');

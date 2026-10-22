@@ -4,12 +4,12 @@ declare(strict_types=1);
 require_once __DIR__ . '/Util.php';
 
 /**
- * Konfigurasi: defaults.json + penimpaan opsional <project>/.claude/kantor-agent.json (nama, judul).
+ * Konfigurasi: defaults.json + penimpaan opsional <project>/.claude/kanna-agent.json (nama, judul).
  * Port Node: lib/node/config.mjs (harus identik — dicek bin/parity.mjs).
  */
 final class KConfig
 {
-    public const REL = '.claude/kantor-agent.json';
+    public const REL = '.claude/kanna-agent.json';
 
     public static function cleanName(mixed $v, int $max = 20): ?string
     {

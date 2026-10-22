@@ -2,24 +2,24 @@
 tags: reference, claude-config
 ---
 
-# CLAUDE.local.md — kantor-agent
+# CLAUDE.local.md — kanna-agent
 
 > Config personal de este scope (**raiz**). Copia sincronizada en el vault
-> (`02-projects/Kantor-Agent/claude-local/main/`), bidireccional en cada
+> (`02-projects/Kanna-Agent/claude-local/main/`), bidireccional en cada
 > SessionStart. Una nota por proyecto, worktree y subcontexto.
 > NO versionar: el equipo no usa Obsidian, graphify ni serena.
 > Excluido via `.git/info/exclude`, sin tocar el `.gitignore` compartido.
-> Proyecto: [[Kantor-Agent]]
+> Proyecto: [[Kanna-Agent]]
 
 ## Obsidian
 - Vault: `~\.dev\obsidian\claude` (o `$env:CLAUDE_VAULT`)
-- Conocimiento: `02-projects/Kantor-Agent/_knowledge/` (`20-rules/`, `21-decisions/`, `22-patterns/`, `23-maps/`)
-- Planes: `02-projects/Kantor-Agent/plans/` — nunca `.md` de planes dentro de este repo.
-- Estado: `02-projects/Kantor-Agent/STATE.md` (skills `inicio-sesion` / `fin-sesion` / `actualizar-estado`).
+- Conocimiento: `02-projects/Kanna-Agent/_knowledge/` (`20-rules/`, `21-decisions/`, `22-patterns/`, `23-maps/`)
+- Planes: `02-projects/Kanna-Agent/plans/` — nunca `.md` de planes dentro de este repo.
+- Estado: `02-projects/Kanna-Agent/STATE.md` (skills `inicio-sesion` / `fin-sesion` / `actualizar-estado`).
 - Notas de sesion organizadas por rama de git.
 
 ## graphify
-- Grafo de este scope: `02-projects/Kantor-Agent/graphify/main/graph.json`
+- Grafo de este scope: `02-projects/Kanna-Agent/graphify/main/graph.json`
 - Navegar: `node <claude-sync>/claude-scripts/graphify-nav.mjs "<termino>" --limit 20`
 - Antes de grep masivo o de listar arboles grandes, consultar el grafo.
 - Actualizar: `graphify update .` (incremental) | `graphify . --code-only` (rebuild).

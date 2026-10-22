@@ -1,4 +1,4 @@
-// Inti Kantor Agent: siapa mengerjakan subagent yang mana. Semua ditentukan dari data transkrip saja
+// Inti Kanna Agent: siapa mengerjakan subagent yang mana. Semua ditentukan dari data transkrip saja
 // (deterministik, sama di setiap muat ulang) — port PHP: lib/php/Office.php (harus identik, dicek bin/parity.mjs).
 //
 // Aturan penugasan (simulasi urut waktu atas semua "job" = segmen kerja subagent 7 hari terakhir):
@@ -38,7 +38,8 @@ export function buildState({ projectDir, storageDir, cfg, now }) {
   }
 
   // run subagent + segmen efektif
-  const runs = [...scan.runs].sort((a, b) => cmp(tsMs(a.started), tsMs(b.started)) || strcmp(a.id, b.id));
+  // run sin segmentos (transcript incompleto) rompia /api/state con 500
+  const runs = scan.runs.filter((r) => r.segs.length > 0).sort((a, b) => cmp(tsMs(a.started), tsMs(b.started)) || strcmp(a.id, b.id));
   const byId = new Map();
   for (const r of runs) {
     const segs = r.segs.map(([a, b]) => ({ start: tsMs(a), startIso: a, end: b === null ? null : tsMs(b), endIso: b }));
@@ -264,7 +265,7 @@ export function buildState({ projectDir, storageDir, cfg, now }) {
   if (!/^https:\/\/[A-Za-z0-9.-]+(:\d+)?\/kerja$/.test(tunnel)) tunnel = '';
 
   return {
-    app: 'kantor-agent',
+    app: 'kanna-agent',
     version: VERSION,
     now: isoMs(now),
     project: cfg.title,

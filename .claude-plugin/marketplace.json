@@ -1,13 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
-  "name": "kantor-agent",
-  "description": "Marketplace untuk plugin Kantor Agent — kantor 3D yang menampilkan Claude dan subagent-nya bekerja.",
+  "name": "kanna-agent",
+  "description": "Marketplace untuk plugin Kanna Agent — kanna 3D yang menampilkan Claude dan subagent-nya bekerja.",
   "owner": { "name": "humaedihume", "url": "https://github.com/humaedihume" },
   "plugins": [
     {
-      "name": "kantor-agent",
+      "name": "kanna-agent",
       "source": ".",
-      "description": "Kantor 3D tanpa konfigurasi: Ketua + tim 4 orang + freelancer, digerakkan transkrip Claude Code nyata.",
+      "description": "Kanna 3D tanpa konfigurasi: Ketua + tim 4 orang + freelancer, digerakkan transkrip Claude Code nyata.",
       "category": "productivity",
       "tags": ["subagents", "dashboard", "three.js", "visualization"]
     }

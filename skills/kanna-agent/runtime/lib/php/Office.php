@@ -5,7 +5,7 @@ require_once __DIR__ . '/Util.php';
 require_once __DIR__ . '/Transcripts.php';
 
 /**
- * Inti Kantor Agent: siapa mengerjakan subagent yang mana — deterministik dari data transkrip.
+ * Inti Kanna Agent: siapa mengerjakan subagent yang mana — deterministik dari data transkrip.
  * Aturan lengkap di komentar lib/node/office.mjs. Port ini harus identik (dicek bin/parity.mjs).
  */
 final class KOffice
@@ -337,7 +337,7 @@ final class KOffice
         }
 
         return [
-            'app' => 'kantor-agent',
+            'app' => 'kanna-agent',
             'version' => self::VERSION,
             'now' => KUtil::isoMs($now),
             'project' => $cfg['title'],

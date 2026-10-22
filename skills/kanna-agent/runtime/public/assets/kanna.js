@@ -1,4 +1,4 @@
-// Kantor Agent — kantor 3D (three.js r170) yang digerakkan data nyata dari /kerja/api/state.
+// Kanna Agent — kanna 3D (three.js r170) yang digerakkan data nyata dari /kerja/api/state.
 // Ketua (sesi utama) punya meja sendiri; 4 anggota tim santai di lounge dan duduk bekerja saat mendapat subagent;
 // freelancer datang lewat pintu bila tim penuh. Tidak ada aktivitas palsu: tanpa data, semua santai.
 import * as THREE from 'three';
@@ -10,7 +10,7 @@ import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.j
 const API = '/kerja/api/state';
 const POLL_MS = 3000;
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const CFG = window.KANTOR || {};
+const CFG = window.KANNA || {};
 const TEAM_NAMES = Array.isArray(CFG.team) && CFG.team.length === 4 ? CFG.team : ['Budi', 'Sari', 'Agus', 'Rina'];
 const KETUA_NAME = typeof CFG.ketua === 'string' ? CFG.ketua : 'Joko';
 const COLORS = CFG.colors || { ketua: '#6a55c9', team: ['#3f6fd1', '#2f9a6d', '#d9772f', '#c2417a'], freelancers: ['#0f8fa3'] };
@@ -262,7 +262,7 @@ const CORRIDOR_Z = -2.1;
   }
 })();
 
-// pintu kantor (jalur masuk/keluar freelancer) — daun pintu berayun terbuka saat ada yang lewat
+// pintu kanna (jalur masuk/keluar freelancer) — daun pintu berayun terbuka saat ada yang lewat
 const door = (() => {
   const g = new THREE.Group();
   const frameM = mat('#fbfaf7', 0.6);
@@ -1801,7 +1801,7 @@ async function poll() {
     const r = await fetch(API, { cache: 'no-store' });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
-    if (!d || d.app !== 'kantor-agent') throw new Error('respons tidak dikenal');
+    if (!d || d.app !== 'kanna-agent') throw new Error('respons tidak dikenal');
     apply(d);
   } catch {
     $('liveDot').classList.add('off');
@@ -1814,9 +1814,9 @@ let reloading = false;
 function maybeReload(d) {
   if (reloading || typeof d.names !== 'string' || (d.names === NAMES_SIG && (typeof CFG.title !== 'string' || d.project === CFG.title))) return false;
   let last = 0;
-  try { last = Number(sessionStorage.getItem('kantor.reloadAt') || 0); } catch { /* penyimpanan tidak tersedia */ }
+  try { last = Number(sessionStorage.getItem('kanna.reloadAt') || 0); } catch { /* penyimpanan tidak tersedia */ }
   if (Date.now() - last < 60000) return false;
-  try { sessionStorage.setItem('kantor.reloadAt', String(Date.now())); } catch { /* abaikan */ }
+  try { sessionStorage.setItem('kanna.reloadAt', String(Date.now())); } catch { /* abaikan */ }
   reloading = true;
   location.reload();
   return true;
@@ -2052,11 +2052,11 @@ function setMin(side, on) {
   const b = panel.querySelector('.minbtn');
   b.setAttribute('aria-expanded', String(!on));
   b.title = on ? 'Abrir panel' : 'Reducir panel';
-  try { localStorage.setItem(`kantor.min.${side}`, on ? '1' : '0'); } catch { /* abaikan */ }
+  try { localStorage.setItem(`kanna.min.${side}`, on ? '1' : '0'); } catch { /* abaikan */ }
 }
 for (const side of ['left', 'right']) {
   let saved = null;
-  try { saved = localStorage.getItem(`kantor.min.${side}`); } catch { /* abaikan */ }
+  try { saved = localStorage.getItem(`kanna.min.${side}`); } catch { /* abaikan */ }
   setMin(side, saved === null ? innerWidth <= 820 : saved === '1');
 }
 document.addEventListener('click', (e) => {
@@ -2079,7 +2079,7 @@ document.addEventListener('click', (e) => {
 function setLapang(on) {
   document.body.classList.toggle('lapang', on);
   $('togglePanel').textContent = on ? 'Mostrar panel' : 'Ver oficina completa';
-  try { localStorage.setItem('kantor.lapang', on ? '1' : '0'); } catch { /* abaikan */ }
+  try { localStorage.setItem('kanna.lapang', on ? '1' : '0'); } catch { /* abaikan */ }
   onResize();
 }
 $('togglePanel').onclick = () => setLapang(!document.body.classList.contains('lapang'));
@@ -2137,7 +2137,7 @@ function onResize() {
   if (innerWidth > 1180 && document.querySelector('.mfeed[aria-selected="true"]')) document.querySelector('[data-tab="riwayat"]').click();
 }
 addEventListener('resize', onResize);
-try { if (localStorage.getItem('kantor.lapang') === '1') document.body.classList.add('lapang'); } catch { /* abaikan */ }
+try { if (localStorage.getItem('kanna.lapang') === '1') document.body.classList.add('lapang'); } catch { /* abaikan */ }
 onResize();
 if (document.body.classList.contains('lapang')) $('togglePanel').textContent = 'Mostrar panel';
 
@@ -2273,9 +2273,9 @@ function turnTo(cur, target, k) {
   return cur + d * Math.min(1, k);
 }
 
-// diagnostik opsional: buka /kerja#debug untuk memeriksa posisi & tujuan karakter di konsol (window.__kantor)
+// diagnostik opsional: buka /kerja#debug untuk memeriksa posisi & tujuan karakter di konsol (window.__kanna)
 if (location.hash === '#debug') {
-  window.__kantor = {
+  window.__kanna = {
     actors: () => [...actors.values()].map((a) => ({ key: a.key, goal: a.goal, walking: a.walking, i: a.i, n: a.path.length, work: a.work, leaving: a.leaving,
       pos: a.p.root.getWorldPosition(new THREE.Vector3()).toArray().map((v) => Math.round(v * 100) / 100) })),
   };

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Uji kesetaraan server PHP (public/index.php via php -S) dan Node (bin/serve-node.mjs) pada project & transkrip yang sama.
 //   node bin/parity.mjs [--project=DIR] [--php-port=8791] [--node-port=8792] [--rounds=2] [--forbid=regex …]
-// Membandingkan: JSON /kerja/api/state (kecuali "now"), window.KANTOR di /kerja, /kerja/api/ping (kecuali "runtime"),
+// Membandingkan: JSON /kerja/api/state (kecuali "now"), window.KANNA di /kerja, /kerja/api/ping (kecuali "runtime"),
 // aset + ETag, header keamanan, 404 untuk path terlarang, 421 untuk Host asing, dan tidak ada rahasia yang bocor.
 // Keluar 0 bila semua sama. Kedua server dimatikan di akhir.
 import { spawn } from 'node:child_process';
@@ -21,7 +21,7 @@ const FORBID = [
   /\bsk-(?!•)[A-Za-z0-9_-]{8,}/, /\bghp_[A-Za-z0-9]{20,}/, /\bAKIA[0-9A-Z]{16}\b/,
   ...process.argv.slice(2).filter((a) => a.startsWith('--forbid=')).map((a) => new RegExp(a.slice(9))),
 ];
-const STORE = fs.mkdtempSync(path.join(os.tmpdir(), 'kantor-parity-'));
+const STORE = fs.mkdtempSync(path.join(os.tmpdir(), 'kanna-parity-'));
 const procs = [];
 const problems = [];
 const ok = [];
@@ -39,7 +39,7 @@ process.on('exit', cleanup);
 for (const s of ['SIGINT', 'SIGTERM']) process.on(s, () => process.exit(130));
 
 function start(cmd, args, env) {
-  const p = spawn(cmd, args, { cwd: RUNTIME, env: { ...process.env, KANTOR_PROJECT: PROJECT, KANTOR_STORAGE: STORE, ...env }, stdio: ['ignore', 'ignore', 'pipe'] });
+  const p = spawn(cmd, args, { cwd: RUNTIME, env: { ...process.env, KANNA_PROJECT: PROJECT, KANNA_STORAGE: STORE, ...env }, stdio: ['ignore', 'ignore', 'pipe'] });
   let err = '';
   p.stderr.on('data', (d) => {
     err += d;
@@ -95,7 +95,7 @@ function check(name, cond, detail = '') {
 }
 
 const phpErr = start('php', ['-S', `127.0.0.1:${PHP_PORT}`, '-t', 'public', 'public/index.php'], {});
-const nodeErr = start(process.execPath, ['bin/serve-node.mjs'], { KANTOR_PORT: String(NODE_PORT), KANTOR_BIND: '127.0.0.1' });
+const nodeErr = start(process.execPath, ['bin/serve-node.mjs'], { KANNA_PORT: String(NODE_PORT), KANNA_BIND: '127.0.0.1' });
 const P = `http://127.0.0.1:${PHP_PORT}`;
 const N = `http://127.0.0.1:${NODE_PORT}`;
 const up = (await waitUp(P, 'PHP', phpErr)) & (await waitUp(N, 'Node', nodeErr));
@@ -117,7 +117,7 @@ if (up) {
   const [tp, tn] = [await hp.text(), await hn.text()];
   check('/kerja 200 di keduanya', hp.status === 200 && hn.status === 200, `${hp.status}/${hn.status}`);
   const cfgOf = (t) => {
-    const m = /window\.KANTOR = (.*?);<\/script>/s.exec(t);
+    const m = /window\.KANNA = (.*?);<\/script>/s.exec(t);
     try {
       return m ? JSON.parse(m[1]) : null;
     } catch {
@@ -125,22 +125,22 @@ if (up) {
     }
   };
   const cd = diff(cfgOf(tp), cfgOf(tn));
-  check('window.KANTOR identik & valid', cfgOf(tp) !== null && cd.length === 0, cd.join('; '));
+  check('window.KANNA identik & valid', cfgOf(tp) !== null && cd.length === 0, cd.join('; '));
   check('<title> identik', (/<title>(.*?)<\/title>/.exec(tp) || [])[1] === (/<title>(.*?)<\/title>/.exec(tn) || [])[1]);
   for (const h of ['x-robots-tag', 'referrer-policy', 'x-content-type-options', 'x-frame-options', 'content-security-policy']) {
     check(`header ${h}`, !!hp.headers.get(h) && hp.headers.get(h) === hn.headers.get(h), `${hp.headers.get(h)} / ${hn.headers.get(h)}`);
   }
   const [pp, pn] = await Promise.all([get(P, '/kerja/api/ping'), get(N, '/kerja/api/ping')]);
   const [jp, jn] = [await pp.json(), await pn.json()];
-  check('/kerja/api/ping identik (kecuali runtime)', jp.app === 'kantor-agent' && jp.project === jn.project && jp.runtime === 'php' && jn.runtime === 'node');
-  const [ap, an] = await Promise.all([get(P, '/kerja/assets/kantor.js'), get(N, '/kerja/assets/kantor.js')]);
-  check('/kerja/assets/kantor.js identik', ap.status === 200 && an.status === 200 && (await ap.text()) === (await an.text()));
+  check('/kerja/api/ping identik (kecuali runtime)', jp.app === 'kanna-agent' && jp.project === jn.project && jp.runtime === 'php' && jn.runtime === 'node');
+  const [ap, an] = await Promise.all([get(P, '/kerja/assets/kanna.js'), get(N, '/kerja/assets/kanna.js')]);
+  check('/kerja/assets/kanna.js identik', ap.status === 200 && an.status === 200 && (await ap.text()) === (await an.text()));
   const etag = an.headers.get('etag');
-  check('ETag sama & 304', etag === ap.headers.get('etag') && (await get(N, '/kerja/assets/kantor.js', { 'If-None-Match': etag })).status === 304
-    && (await get(P, '/kerja/assets/kantor.js', { 'If-None-Match': etag })).status === 304);
+  check('ETag sama & 304', etag === ap.headers.get('etag') && (await get(N, '/kerja/assets/kanna.js', { 'If-None-Match': etag })).status === 304
+    && (await get(P, '/kerja/assets/kanna.js', { 'If-None-Match': etag })).status === 304);
   for (const bad of [
     '/kerja/assets/..%2F..%2Flib%2Fphp%2FConfig.php', '/kerja/assets/..%2Fdefaults.json', '/kerja/assets/%2e%2e/%2e%2e/defaults.json',
-    '/kerja/assets/../../bin/kantor.sh', '/kerja/assets/vendor/three/LICENSE', '/kerja/api/doc?path=README.md', '/kerja/evidence/x.png',
+    '/kerja/assets/../../bin/kanna.sh', '/kerja/assets/vendor/three/LICENSE', '/kerja/api/doc?path=README.md', '/kerja/evidence/x.png',
     '/kerja/tidak-ada', '/lib/php/Config.php', '/defaults.json', '/views/page.html', '/public/index.php', '/kerja/assets/%00.js',
   ]) {
     const [bp, bn] = await Promise.all([get(P, bad), get(N, bad)]);

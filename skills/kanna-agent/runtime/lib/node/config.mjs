@@ -1,9 +1,9 @@
-// Konfigurasi: defaults.json + penimpaan opsional <project>/.claude/kantor-agent.json (nama, judul).
+// Konfigurasi: defaults.json + penimpaan opsional <project>/.claude/kanna-agent.json (nama, judul).
 // Port PHP: lib/php/Config.php (harus identik — dicek bin/parity.mjs).
 import path from 'node:path';
 import { isFile, isPlainObj, phpTrim, readText, values } from './util.mjs';
 
-export const CONFIG_REL = '.claude/kantor-agent.json';
+export const CONFIG_REL = '.claude/kanna-agent.json';
 
 // nama tampilan: string, tanpa karakter kontrol, maks 20 titik kode; selain itu null
 export function cleanName(v, max = 20) {

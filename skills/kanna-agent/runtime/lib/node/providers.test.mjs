@@ -23,7 +23,7 @@ assert.equal(r.lastKind, 'handback');
 
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'agy-'));
 const emit = path.join(import.meta.dirname, '..', '..', 'bin', 'agy-emit.mjs');
-const env = { ...process.env, KANTOR_PROVIDERS_DIR: dir };
+const env = { ...process.env, KANNA_PROVIDERS_DIR: dir };
 const out = execFileSync('node', [emit, 'pre'], { input: '{"session_id":"s1","tool_name":"run_command","tool_input":{"command":"npm test"}}', env }).toString();
 assert.equal(out.trim(), '{}'); // el emisor nunca decide nada
 execFileSync('node', [emit, 'stop'], { input: '{"session_id":"s1"}', env });

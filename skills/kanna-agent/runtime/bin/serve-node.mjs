@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// Server Kantor Agent untuk Node ≥ 18 (tanpa dependensi npm). Setara dengan public/index.php (PHP) — dicek bin/parity.mjs.
+// Server Kanna Agent untuk Node ≥ 18 (tanpa dependensi npm). Setara dengan public/index.php (PHP) — dicek bin/parity.mjs.
 //   /kerja  /kerja/api/state  /kerja/api/ping  /kerja/assets/<file.js>
 // Read-only: hanya membaca transkrip Claude Code project (ringkasan tool_use; isi tool_result tidak pernah dibaca).
-// Biasanya dijalankan lewat bin/kantor.sh start. Variabel lingkungan:
-//   KANTOR_PROJECT  folder project (default: folder kerja saat ini)   KANTOR_STORAGE  folder cache/pid (opsional)
-//   KANTOR_PORT     port (default 8788)   KANTOR_BIND  alamat (default 127.0.0.1)   KANTOR_ALLOWED_HOSTS  host tambahan
+// Biasanya dijalankan lewat bin/kanna.sh start. Variabel lingkungan:
+//   KANNA_PROJECT  folder project (default: folder kerja saat ini)   KANNA_STORAGE  folder cache/pid (opsional)
+//   KANNA_PORT     port (default 8788)   KANNA_BIND  alamat (default 127.0.0.1)   KANNA_ALLOWED_HOSTS  host tambahan
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import http from 'node:http';
@@ -21,12 +21,12 @@ const RUNTIME = fs.realpathSync(path.resolve(path.dirname(fileURLToPath(import.m
 const PUBLIC = path.join(RUNTIME, 'public');
 let PROJECT;
 try {
-  PROJECT = fs.realpathSync(process.env.KANTOR_PROJECT || process.cwd());
+  PROJECT = fs.realpathSync(process.env.KANNA_PROJECT || process.cwd());
 } catch {
-  console.error(`[kantor] folder project tidak ditemukan: ${process.env.KANTOR_PROJECT}`);
+  console.error(`[kanna] folder project tidak ditemukan: ${process.env.KANNA_PROJECT}`);
   process.exit(1);
 }
-const STORAGE = process.env.KANTOR_STORAGE ? path.resolve(process.env.KANTOR_STORAGE) : null;
+const STORAGE = process.env.KANNA_STORAGE ? path.resolve(process.env.KANNA_STORAGE) : null;
 const { loadConfig } = await import(new URL('../lib/node/config.mjs', import.meta.url));
 const { buildState } = await import(new URL('../lib/node/office.mjs', import.meta.url));
 const { pageConfig, hostAllowed, SECURITY_HEADERS } = await import(new URL('../lib/node/http.mjs', import.meta.url));
@@ -39,7 +39,7 @@ if (STORAGE) {
   }
 }
 const PROJECT_ID = crypto.createHash('md5').update(PROJECT).digest('hex').slice(0, 12);
-const extraHosts = String(process.env.KANTOR_ALLOWED_HOSTS || '');
+const extraHosts = String(process.env.KANNA_ALLOWED_HOSTS || '');
 
 const htmlEsc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[c]));
 // setara JSON_HEX_TAG|JSON_HEX_AMP|JSON_HEX_APOS (karakter ini hanya muncul di dalam string JSON): aman di <script>
@@ -70,15 +70,15 @@ async function handle(req, res) {
   if (p === '' || p === '/index.php') return send(res, 302, { Location: '/kerja' }, '');
   if (p === '/kerja/api/ping') {
     return send(res, 200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
-      JSON.stringify({ app: 'kantor-agent', project: PROJECT_ID, runtime: 'node' }));
+      JSON.stringify({ app: 'kanna-agent', project: PROJECT_ID, runtime: 'node' }));
   }
-  // config dibaca per permintaan supaya perubahan .claude/kantor-agent.json langsung terpakai
+  // config dibaca per permintaan supaya perubahan .claude/kanna-agent.json langsung terpakai
   const cfg = loadConfig(RUNTIME, PROJECT);
   if (p === '/kerja') {
     const page = fs.readFileSync(path.join(RUNTIME, 'views', 'page.html'), 'utf8');
     const html = page.replace(/\{\{TITLE\}\}|\{\{CONFIG_SCRIPT\}\}/g, (m) => (m === '{{TITLE}}'
       ? htmlEsc(cfg.title)
-      : `<script>window.KANTOR = ${scriptJson(pageConfig(cfg))};</script>`));
+      : `<script>window.KANNA = ${scriptJson(pageConfig(cfg))};</script>`));
     return send(res, 200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' }, html);
   }
   if (p === '/kerja/api/state') {
@@ -107,24 +107,24 @@ async function handle(req, res) {
   return send(res, 404, { 'Content-Type': 'text/plain; charset=utf-8' }, 'Tidak ditemukan');
 }
 
-const port = Number(process.env.KANTOR_PORT || 8788);
-const bind = process.env.KANTOR_BIND || '127.0.0.1';
+const port = Number(process.env.KANNA_PORT || 8788);
+const bind = process.env.KANNA_BIND || '127.0.0.1';
 if (!Number.isInteger(port) || port < 1 || port > 65535) {
-  console.error(`[kantor] port tidak valid: ${process.env.KANTOR_PORT}`);
+  console.error(`[kanna] port tidak valid: ${process.env.KANNA_PORT}`);
   process.exit(1);
 }
 const server = http.createServer((req, res) => {
   handle(req, res).catch((e) => {
-    console.error(`[kantor] ${req.method} ${req.url}: ${e && e.stack ? e.stack : e}`);
+    console.error(`[kanna] ${req.method} ${req.url}: ${e && e.stack ? e.stack : e}`);
     if (!res.headersSent) send(res, 500, { 'Content-Type': 'text/plain; charset=utf-8' }, 'Kesalahan server');
     else res.end();
   });
 });
 server.on('error', (e) => {
-  console.error(`[kantor] server gagal: ${e.code === 'EADDRINUSE' ? `port ${port} sudah dipakai` : e.message}`);
+  console.error(`[kanna] server gagal: ${e.code === 'EADDRINUSE' ? `port ${port} sudah dipakai` : e.message}`);
   process.exit(e.code === 'EADDRINUSE' ? 3 : 1);
 });
-server.listen(port, bind, () => console.log(`Kantor Agent: http://${bind === '0.0.0.0' ? '127.0.0.1' : bind}:${port}/kerja  (Node ${process.versions.node})`));
+server.listen(port, bind, () => console.log(`Kanna Agent: http://${bind === '0.0.0.0' ? '127.0.0.1' : bind}:${port}/kerja  (Node ${process.versions.node})`));
 for (const sig of ['SIGINT', 'SIGTERM']) {
   process.on(sig, () => {
     server.close(() => process.exit(0));

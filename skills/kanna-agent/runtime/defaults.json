@@ -1,5 +1,5 @@
 {
-  "_catatan": "Nilai bawaan Kantor Agent — dibaca sama persis oleh server Node (lib/node) dan PHP (lib/php). Penimpaan opsional per project: <project>/.claude/kantor-agent.json (lihat README).",
+  "_catatan": "Nilai bawaan Kanna Agent — dibaca sama persis oleh server Node (lib/node) dan PHP (lib/php). Penimpaan opsional per project: <project>/.claude/kanna-agent.json (lihat README).",
   "ketua": "Inuyasha",
   "team": [
     "Sesshomaru",

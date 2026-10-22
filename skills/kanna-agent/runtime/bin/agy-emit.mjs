@@ -7,7 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 
 const phase = process.argv[2] || 'post';
-const dir = process.env.KANTOR_PROVIDERS_DIR || path.join(os.homedir(), '.cache', 'kantor-agent', 'providers', 'agy');
+const dir = process.env.KANNA_PROVIDERS_DIR || path.join(os.homedir(), '.cache', 'kanna-agent', 'providers', 'agy');
 
 let raw = '';
 try {

@@ -1,18 +1,18 @@
-# Kantor Agent — lihat Claude & subagent-nya bekerja di kantor 3D
+# Kanna Agent — lihat Claude & subagent-nya bekerja di kanna 3D
 
-> **English summary.** Kantor Agent is a zero-config [Claude Code](https://code.claude.com) plugin (one skill) that
+> **English summary.** Kanna Agent is a zero-config [Claude Code](https://code.claude.com) plugin (one skill) that
 > shows what Claude is doing in your project as a small 3D office (three.js). The main session is the team lead
 > **Joko**, who works at his own desk. Four teammates — **Budi, Sari, Agus, Rina** — lounge in the break area (TV,
 > coffee, games, guitar, small talk) and walk to a desk whenever Claude spawns a subagent of **any** type; when all
 > four are busy, **freelancers** enter through the office door, work at spare desks, and leave when done. Everything
 > is driven by the real, local Claude Code transcripts (`~/.claude/projects`), read-only and redacted — no fake
-> activity. One command (`/kantor-agent:kantor-agent`) starts a local server (Node ≥ 18, or PHP ≥ 8.1) at
+> activity. One command (`/kanna-agent:kanna-agent`) starts a local server (Node ≥ 18, or PHP ≥ 8.1) at
 > `http://127.0.0.1:8788/kerja` without writing any file into your project; an optional cloudflared tunnel gives a
 > temporary public URL. UI and docs are in Bahasa Indonesia. MIT licensed.
 
-![Kantor Agent — tim sedang bekerja](docs/kantor-bekerja.webp)
+![Kanna Agent — tim sedang bekerja](docs/kanna-bekerja.webp)
 
-**Kantor Agent** memperlihatkan apa yang sedang dikerjakan Claude Code di project-mu sebagai kantor kecil 3D.
+**Kanna Agent** memperlihatkan apa yang sedang dikerjakan Claude Code di project-mu sebagai kanna kecil 3D.
 Tidak ada peran atau tim yang perlu diatur: sesi utama menjadi **Ketua**, setiap subagent dikerjakan oleh anggota
 tim yang sedang santai, dan bila tim penuh datanglah **freelancer**. Semua gerakan berasal dari transkrip Claude Code
 yang nyata — tanpa data karangan, tanpa login, tanpa konfigurasi.
@@ -24,8 +24,8 @@ yang nyata — tanpa data karangan, tanpa login, tanpa konfigurasi.
 - [Masalah umum / FAQ](#masalah-umum--faq) · [Memperbarui](#memperbarui) · [Mencopot](#mencopot) · [Lisensi](#lisensi)
 
 ## Fitur
-- **Nol konfigurasi, satu perintah.** `/kantor-agent:kantor-agent` menyalakan server lokal dan mencetak URL-nya.
-  Tidak ada file yang ditulis ke folder project (cache & log di `~/.cache/kantor-agent/`).
+- **Nol konfigurasi, satu perintah.** `/kanna-agent:kanna-agent` menyalakan server lokal dan mencetak URL-nya.
+  Tidak ada file yang ditulis ke folder project (cache & log di `~/.cache/kanna-agent/`).
 - **Ketua "Joko"** = sesi utama Claude. Bekerja di mejanya dengan pose sesuai aksi terakhir (mengetik, membaca,
   terminal, berpikir), santai saat sesi diam. Beberapa sesi aktif → yang terbaru ditampilkan + catatan "+N sesi lain".
 - **Tim 4 orang** (Budi, Sari, Agus, Rina) nonton TV, main PS, ngopi, minum, main gitar, peregangan di jendela,
@@ -40,7 +40,7 @@ yang nyata — tanpa data karangan, tanpa login, tanpa konfigurasi.
 
 | Semua santai | Tim penuh + freelancer | Ponsel |
 |---|---|---|
-| ![Mode santai](docs/kantor-santai.webp) | ![Freelancer](docs/freelancer-penuh.webp) | ![Ponsel](docs/ponsel.webp) |
+| ![Mode santai](docs/kanna-santai.webp) | ![Freelancer](docs/freelancer-penuh.webp) | ![Ponsel](docs/ponsel.webp) |
 
 > Semua tangkapan layar berasal dari project demo dengan transkrip **sintetis**.
 
@@ -57,38 +57,38 @@ yang nyata — tanpa data karangan, tanpa login, tanpa konfigurasi.
 Di Claude Code (sesi mana pun):
 ```text
 /plugin marketplace add humaedihume/kantor-agent
-/plugin install kantor-agent@kantor-agent
+/plugin install kanna-agent@kanna-agent
 /reload-plugins
 ```
-Atau dari terminal: `claude plugin marketplace add humaedihume/kantor-agent && claude plugin install kantor-agent@kantor-agent`.
+Atau dari terminal: `claude plugin marketplace add humaedihume/kantor-agent && claude plugin install kanna-agent@kanna-agent`.
 
 Lalu, **di folder project yang ingin dipantau**:
 ```text
-/kantor-agent:kantor-agent
+/kanna-agent:kanna-agent
 ```
 Keluaran kira-kira:
 ```text
-Kantor Agent berjalan (node) untuk project: toko-kue
+Kanna Agent berjalan (node) untuk project: toko-kue
   URL      : http://127.0.0.1:8788/kerja
-  Hentikan : bash "…/skills/kantor-agent/runtime/bin/kantor.sh" stop
+  Hentikan : bash "…/skills/kanna-agent/runtime/bin/kanna.sh" stop
 ```
-Buka URL itu di browser. Perintah lain: `/kantor-agent:kantor-agent status`, `… stop`, `… publik` (URL publik),
-`… tutup-publik`. Kamu juga cukup bilang "nyalakan kantor agent"; Claude akan memakai skill ini.
+Buka URL itu di browser. Perintah lain: `/kanna-agent:kanna-agent status`, `… stop`, `… publik` (URL publik),
+`… tutup-publik`. Kamu juga cukup bilang "nyalakan kanna agent"; Claude akan memakai skill ini.
 
 ## Pasang manual
-Tanpa sistem plugin — skill biasa bernama `/kantor-agent`:
+Tanpa sistem plugin — skill biasa bernama `/kanna-agent`:
 ```bash
 git clone https://github.com/humaedihume/kantor-agent.git
 mkdir -p ~/.claude/skills
-ln -s "$PWD/kantor-agent/skills/kantor-agent" ~/.claude/skills/kantor-agent   # atau: cp -R … ~/.claude/skills/
+ln -s "$PWD/kanna-agent/skills/kanna-agent" ~/.claude/skills/kanna-agent   # atau: cp -R … ~/.claude/skills/
 ```
-Buka sesi Claude Code baru di folder project lalu jalankan `/kantor-agent`. Tanpa Claude pun bisa, langsung dari
+Buka sesi Claude Code baru di folder project lalu jalankan `/kanna-agent`. Tanpa Claude pun bisa, langsung dari
 terminal di folder project:
 ```bash
-bash ~/.claude/skills/kantor-agent/runtime/bin/kantor.sh start     # stop | status | restart | url | tunnel | detect
+bash ~/.claude/skills/kanna-agent/runtime/bin/kanna.sh start     # stop | status | restart | url | tunnel | detect
 ```
-> Jangan memasang versi plugin **dan** manual bersamaan — keduanya akan tampil (`/kantor-agent:kantor-agent` dan
-> `/kantor-agent`). Pilih salah satu.
+> Jangan memasang versi plugin **dan** manual bersamaan — keduanya akan tampil (`/kanna-agent:kanna-agent` dan
+> `/kanna-agent`). Pilih salah satu.
 
 ## Cara kerja
 ```text
@@ -98,16 +98,16 @@ bash ~/.claude/skills/kantor-agent/runtime/bin/kantor.sh start     # stop | stat
                                  /<sesi>/subagents/workflows/<wf>/agent-*  (subagent workflow)
         │  dibaca read-only & inkremental; hanya ringkasan tool_use — isi tool_result TIDAK pernah dibaca
         ▼
-skills/kantor-agent/runtime/   (dijalankan langsung dari folder plugin — tidak disalin ke project)
-  bin/kantor.sh ── pilih runtime & port bebas ──┬─ Node:  bin/serve-node.mjs + lib/node/*.mjs
+skills/kanna-agent/runtime/   (dijalankan langsung dari folder plugin — tidak disalin ke project)
+  bin/kanna.sh ── pilih runtime & port bebas ──┬─ Node:  bin/serve-node.mjs + lib/node/*.mjs
                                                 └─ PHP:   php -S … public/index.php + lib/php/*.php
-        │  cache, PID, log → ~/.cache/kantor-agent/<slug-project>/
+        │  cache, PID, log → ~/.cache/kanna-agent/<slug-project>/
         ├── GET /kerja            halaman (views/page.html)
         ├── GET /kerja/api/state  JSON status, dipolling tiap 3 detik
         ├── GET /kerja/api/ping   identitas server (untuk start/stop idempoten)
-        └── GET /kerja/assets/*   three.js r170 (vendored) + kantor.js
+        └── GET /kerja/assets/*   three.js r170 (vendored) + kanna.js
         ▼
-Browser: kantor 3D — meja Ketua, 4 meja tim, 4 meja cadangan, lounge, pintu, papan tulis, panel & kartu
+Browser: kanna 3D — meja Ketua, 4 meja tim, 4 meja cadangan, lounge, pintu, papan tulis, panel & kartu
 ```
 - `<slug-project>` = path absolut project dengan setiap karakter non-alfanumerik diganti `-` (sama seperti Claude Code).
 - Folder transkrip mengikuti `CLAUDE_CONFIG_DIR` (bila di-set) atau `HOME` — server berjalan sebagai user yang sama.
@@ -135,7 +135,7 @@ berikutnya yang mulai ≥ 60 detik kemudian akan dikerjakan Budi lagi.
 
 ## Pengaturan opsional
 Tidak ada file konfigurasi yang wajib. Untuk mengganti nama, judul, atau port, buat
-`<project>/.claude/kantor-agent.json` (semua kunci opsional):
+`<project>/.claude/kanna-agent.json` (semua kunci opsional):
 ```json
 {
   "title": "Toko Kue",
@@ -157,39 +157,39 @@ Tidak ada file konfigurasi yang wajib. Untuk mengganti nama, judul, atau port, b
 | `names.freelancers` | Daftar nama freelancer. |
 | `autostart` | `true` = hook SessionStart plugin menyalakan server otomatis (lihat di bawah). |
 
-Variabel lingkungan: `KANTOR_PORT`, `KANTOR_RUNTIME` (`node`/`php`), `KANTOR_BIND` (default `127.0.0.1`),
-`KANTOR_STATE_DIR` (lokasi cache/log), `KANTOR_ALLOWED_HOSTS` (host tambahan di belakang reverse proxy),
-`KANTOR_AUTOSTART=1`, `CLAUDE_CONFIG_DIR`. Perubahan nama/judul langsung terpakai (halaman memuat ulang sendiri).
+Variabel lingkungan: `KANNA_PORT`, `KANNA_RUNTIME` (`node`/`php`), `KANNA_BIND` (default `127.0.0.1`),
+`KANNA_STATE_DIR` (lokasi cache/log), `KANNA_ALLOWED_HOSTS` (host tambahan di belakang reverse proxy),
+`KANNA_AUTOSTART=1`, `CLAUDE_CONFIG_DIR`. Perubahan nama/judul langsung terpakai (halaman memuat ulang sendiri).
 
 ## Mode menjalankan
 | Cara | Perintah (dari folder project) |
 |---|---|
-| Node (bawaan) | `bash <runtime>/bin/kantor.sh start` |
-| PHP | `bash <runtime>/bin/kantor.sh start --php` |
-| Port lain | `bash <runtime>/bin/kantor.sh start --port 9000` |
-| Status / hentikan | `bash <runtime>/bin/kantor.sh status` · `… stop` · `… restart` |
-| Jaringan lokal (LAN) | `KANTOR_BIND=0.0.0.0 bash <runtime>/bin/kantor.sh restart` → `http://<ip-komputer>:8788/kerja` |
-| Otomatis saat sesi mulai | `"autostart": true` di `.claude/kantor-agent.json` (plugin) |
+| Node (bawaan) | `bash <runtime>/bin/kanna.sh start` |
+| PHP | `bash <runtime>/bin/kanna.sh start --php` |
+| Port lain | `bash <runtime>/bin/kanna.sh start --port 9000` |
+| Status / hentikan | `bash <runtime>/bin/kanna.sh status` · `… stop` · `… restart` |
+| Jaringan lokal (LAN) | `KANNA_BIND=0.0.0.0 bash <runtime>/bin/kanna.sh restart` → `http://<ip-komputer>:8788/kerja` |
+| Otomatis saat sesi mulai | `"autostart": true` di `.claude/kanna-agent.json` (plugin) |
 
-`<runtime>` = `~/.claude/skills/kantor-agent/runtime` (pasang manual) atau folder plugin — skill mencetak path persisnya.
+`<runtime>` = `~/.claude/skills/kanna-agent/runtime` (pasang manual) atau folder plugin — skill mencetak path persisnya.
 `start` idempoten: bila server sudah berjalan untuk project itu, hanya URL yang dicetak; setelah plugin diperbarui,
 `start` otomatis memulai ulang server dengan versi baru. Setiap project mendapat servernya sendiri.
 
 **Autostart (opsional, mati secara bawaan).** Plugin memasang hook `SessionStart` yang **tidak melakukan apa pun**
-kecuali project mengaktifkannya (`"autostart": true`) atau `KANTOR_AUTOSTART=1` di-set. Hook itu senyap (tanpa output
+kecuali project mengaktifkannya (`"autostart": true`) atau `KANNA_AUTOSTART=1` di-set. Hook itu senyap (tanpa output
 ke sesi), selesai dalam milidetik, dan menjalankan server di latar belakang. Pemasangan manual tidak memasang hook;
 bila ingin, tambahkan ke `.claude/settings.json` project:
 ```json
 { "hooks": { "SessionStart": [ { "hooks": [ { "type": "command",
-  "command": "KANTOR_AUTOSTART=1 bash ~/.claude/skills/kantor-agent/runtime/bin/kantor.sh autostart" } ] } ] } }
+  "command": "KANNA_AUTOSTART=1 bash ~/.claude/skills/kanna-agent/runtime/bin/kanna.sh autostart" } ] } ] } }
 ```
 
 ## URL publik (tunnel)
 ```text
-/kantor-agent:kantor-agent publik        (atau: bash <runtime>/bin/kantor.sh tunnel)
+/kanna-agent:kanna-agent publik        (atau: bash <runtime>/bin/kanna.sh tunnel)
 ```
 Membuka quick tunnel cloudflared → `https://<acak>.trycloudflare.com/kerja` (tampil juga di halaman). Matikan dengan
-`… tutup-publik` / `kantor.sh tunnel-stop`; `stop` juga mematikannya. URL berganti setiap kali tunnel dibuka ulang.
+`… tutup-publik` / `kanna.sh tunnel-stop`; `stop` juga mematikannya. URL berganti setiap kali tunnel dibuka ulang.
 
 > ⚠️ **Keamanan: halaman ini tidak punya login.** Isinya read-only dan diredaksi, tetapi tetap memperlihatkan
 > deskripsi tugas subagent, nama file, dan ringkasan aktivitas project. **Siapa pun yang tahu URL publik bisa
@@ -210,9 +210,9 @@ Membuka quick tunnel cloudflared → `https://<acak>.trycloudflare.com/kerja` (t
 - Obrolan receh karakter adalah teks tetap yang tidak pernah menyebut data nyata.
 
 ## Masalah umum / FAQ
-**Semua karakter santai terus.** Kantor hanya bergerak bila ada aktivitas nyata. Pastikan server dijalankan dari
+**Semua karakter santai terus.** Kanna hanya bergerak bila ada aktivitas nyata. Pastikan server dijalankan dari
 **folder yang sama** dengan tempat Claude Code dibuka (path harus identik — hindari membuka lewat symlink). Cek
-`bash <runtime>/bin/kantor.sh status` → baris *Transkrip* menunjukkan folder yang dibaca dan jumlah sesinya.
+`bash <runtime>/bin/kanna.sh status` → baris *Transkrip* menunjukkan folder yang dibaca dan jumlah sesinya.
 
 **Subagent sudah dihentikan tapi karakter masih bekerja.** Subagent yang dihentikan lewat `TaskStop` langsung
 terdeteksi. Bila prosesnya mati tanpa jejak (mis. Claude Code ditutup), karakter kembali santai setelah 15 menit
@@ -226,11 +226,11 @@ tanpa aktivitas.
 **Layar kosong / 3D tidak tampil.** Browser butuh WebGL (panel tetap berjalan tanpa WebGL). Coba browser lain atau
 aktifkan akselerasi grafis.
 
-**Membuka dari ponsel.** Satu jaringan: `KANTOR_BIND=0.0.0.0 … restart` lalu buka `http://<ip-komputer>:8788/kerja`
+**Membuka dari ponsel.** Satu jaringan: `KANNA_BIND=0.0.0.0 … restart` lalu buka `http://<ip-komputer>:8788/kerja`
 (siapa pun di jaringan itu bisa membukanya). Beda jaringan: pakai [tunnel](#url-publik-tunnel).
 
 **Di belakang reverse proxy / domain sendiri.** Teruskan seluruh prefiks `/kerja` ke `127.0.0.1:<port>` dan set
-`KANTOR_ALLOWED_HOSTS=kantor.domainmu.com` (tanpa itu server menolak Host asing dengan 421). Pasang autentikasi di proxy.
+`KANNA_ALLOWED_HOSTS=kanna.domainmu.com` (tanpa itu server menolak Host asing dengan 421). Pasang autentikasi di proxy.
 
 **Karakter berjalan pelan / patah-patah.** Perangkat lambat merender dengan fps rendah; gerakan tetap sampai tujuan.
 Aktifkan "Kurangi gerakan" (prefers-reduced-motion) di sistem untuk berpindah tanpa animasi.
@@ -239,24 +239,24 @@ Aktifkan "Kurangi gerakan" (prefers-reduced-motion) di sistem untuk berpindah ta
 browser sempat gagal lebih awal, ia bisa menyimpan kegagalan itu sebentar — tunggu lalu muat ulang (atau buka dari
 perangkat lain).
 
-**Windows.** Jalankan Claude Code dan Kantor Agent di WSL (butuh bash).
+**Windows.** Jalankan Claude Code dan Kanna Agent di WSL (butuh bash).
 
 ## Memperbarui
-- **Plugin:** `claude plugin marketplace update kantor-agent` lalu `claude plugin update kantor-agent@kantor-agent`
+- **Plugin:** `claude plugin marketplace update kanna-agent` lalu `claude plugin update kanna-agent@kanna-agent`
   (atau `/plugin` → **Installed** → **Update now**), kemudian `/reload-plugins` dan jalankan skill lagi — server lama
   otomatis diganti versi baru.
-- **Manual:** `git pull` di folder clone (symlink langsung ikut), lalu `kantor.sh restart`.
+- **Manual:** `git pull` di folder clone (symlink langsung ikut), lalu `kanna.sh restart`.
 
 ## Mencopot
-1. Hentikan server di setiap project yang memakainya: `bash <runtime>/bin/kantor.sh stop`.
-2. Plugin: `claude plugin uninstall kantor-agent@kantor-agent`, lalu `claude plugin marketplace remove kantor-agent`.
-   Manual: `rm ~/.claude/skills/kantor-agent` (symlink) atau `rm -rf ~/.claude/skills/kantor-agent`.
-3. Hapus cache & log: `rm -rf ~/.cache/kantor-agent`. Bila pernah membuat `.claude/kantor-agent.json`, hapus juga.
+1. Hentikan server di setiap project yang memakainya: `bash <runtime>/bin/kanna.sh stop`.
+2. Plugin: `claude plugin uninstall kanna-agent@kanna-agent`, lalu `claude plugin marketplace remove kanna-agent`.
+   Manual: `rm ~/.claude/skills/kanna-agent` (symlink) atau `rm -rf ~/.claude/skills/kanna-agent`.
+3. Hapus cache & log: `rm -rf ~/.cache/kanna-agent`. Bila pernah membuat `.claude/kanna-agent.json`, hapus juga.
 
 ## Kontribusi
 Issue dan pull request dipersilakan di [github.com/humaedihume/kantor-agent](https://github.com/humaedihume/kantor-agent).
 - Logika server ada di **dua** runtime: ubah `lib/node/*.mjs` **dan** `lib/php/*.php`, lalu jalankan
-  `node skills/kantor-agent/runtime/bin/parity.mjs --project=<project-uji>` (harus `PARITY OK`).
+  `node skills/kanna-agent/runtime/bin/parity.mjs --project=<project-uji>` (harus `PARITY OK`).
 - Validasi plugin: `claude plugin validate --strict .`.
 - Jangan pernah menyertakan transkrip, path, atau data project nyata di contoh/tangkapan layar.
 
